@@ -7,7 +7,7 @@ import sensors.Bodenfeuchtigkeitssensor
 import sensors.Camera
 import os
 
-def setup_csv():
+def setup_csv(): #kommentar
     if not os.path.isfile(config.CSV_FILENAME):
         with open(config.CSV_FILENAME, "w+") as file:
             file.write("Timestamp; temp; humidity; bodenfeuchtigkeit;\n")
