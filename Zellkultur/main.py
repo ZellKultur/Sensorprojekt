@@ -30,6 +30,18 @@ def read_bodensensor(boden_sensor, shared_data):
     return
 
 
+def read_camera(skip=False):
+    if skip:
+        return
+    print("say cheese!")
+    basepath = sensors.Camera.create_testbilder_path(config.IMAGE_PATH)
+    filename = sensors.Camera.timestampname()
+    filepath = f"{basepath}/{filename}"
+    sensors.Camera.take_picture(filepath)
+    print("took a picture")
+    return
+
+
 def write_data_to_csv(data_to_write):
     tempdata = data_to_write["tempsensor"]
     bodendata = data_to_write["bodensensor"]
@@ -68,20 +80,26 @@ if __name__ == '__main__':
     bodensensor = sensors.Bodenfeuchtigkeitssensor.Bodenfeuchtigkeitssensor(config.BODENSENSORPIN)
     setup_csv()
     starting_time = time.time()
-
+    camera_skip_counter = 0
     while True:
         shared_thread_data = {}
 
         temp_thread = threading.Thread(target=read_tempsensor, args=(tempsensor, shared_thread_data))
         boden_thread = threading.Thread(target=read_bodensensor, args=(bodensensor, shared_thread_data))
+        camera_thread = threading.Thread(target=read_camera, args=(camera_skip_counter != 0))
+
 
         temp_thread.start()
         boden_thread.start()
+        camera_thread.start()
 
         temp_thread.join()
         boden_thread.join()
+        camera_thread.join()
 
         write_data_to_csv(shared_thread_data)
         write_data_to_cli(shared_thread_data)
 
+        camera_skip_counter += 1
+        camera_skip_counter %= config.CAMERA_SKIP_MEASUREMENTS
         sleep_till_next_tick(starting_time, config.MAIN_LOOP_TICK_SECONDS)
