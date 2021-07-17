@@ -33,7 +33,7 @@ def read_bodensensor(boden_sensor, shared_data):
 def write_data_to_csv(data_to_write):
     tempdata = data_to_write["tempsensor"]
     bodendata = data_to_write["bodensensor"]
-    with open(config.CSV_FILENAME) as file:
+    with open(config.CSV_FILENAME, "w") as file:
         timestamp = tempdata["timestamp"]
         temperatur = tempdata["temp"]
         humidity = tempdata["humidity"]
