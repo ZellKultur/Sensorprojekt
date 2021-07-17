@@ -5,7 +5,9 @@ import config
 import sensors.Temp_HumiditySensor
 import sensors.Bodenfeuchtigkeitssensor
 import sensors.Camera
+import sensors.LED
 import os
+import RPi.GPIO
 
 def setup_csv(): #kommentar
     if not os.path.isfile(config.CSV_FILENAME):
@@ -26,7 +28,13 @@ def read_tempsensor(temp_sensor, shared_data):
 
 
 def read_bodensensor(boden_sensor, shared_data):
-    shared_data["bodensensor"] = boden_sensor.read()
+    data = boden_sensor.read()
+    shared_data["bodensensor"] = data
+    if data == "LOW":
+        sensors.LED.on(config.NEEDS_WATER_LED_PIN)
+    else:
+        sensors.LED.off(config.NEEDS_WATER_LED_PIN)
+
     return
 
 
@@ -81,25 +89,31 @@ if __name__ == '__main__':
     setup_csv()
     starting_time = time.time()
     camera_skip_counter = 0
-    while True:
-        shared_thread_data = {}
+    try:
+        sensors.LED.setup(config.ALWAYS_ON_LED_PIN)
+        sensors.LED.setup(config.NEEDS_WATER_LED_PIN)
+        sensors.LED.on(config.ALWAYS_ON_LED_PIN)
+        while True:
+            shared_thread_data = {}
 
-        temp_thread = threading.Thread(target=read_tempsensor, args=(tempsensor, shared_thread_data))
-        boden_thread = threading.Thread(target=read_bodensensor, args=(bodensensor, shared_thread_data))
-        camera_thread = threading.Thread(target=read_camera, args=(camera_skip_counter != 0,))
+            temp_thread = threading.Thread(target=read_tempsensor, args=(tempsensor, shared_thread_data))
+            boden_thread = threading.Thread(target=read_bodensensor, args=(bodensensor, shared_thread_data))
+            camera_thread = threading.Thread(target=read_camera, args=(camera_skip_counter != 0,))
 
 
-        temp_thread.start()
-        boden_thread.start()
-        camera_thread.start()
+            temp_thread.start()
+            boden_thread.start()
+            camera_thread.start()
 
-        temp_thread.join()
-        boden_thread.join()
-        camera_thread.join()
+            temp_thread.join()
+            boden_thread.join()
+            camera_thread.join()
 
-        write_data_to_csv(shared_thread_data)
-        write_data_to_cli(shared_thread_data)
+            write_data_to_csv(shared_thread_data)
+            write_data_to_cli(shared_thread_data)
 
-        camera_skip_counter += 1
-        camera_skip_counter %= config.CAMERA_SKIP_MEASUREMENTS
-        sleep_till_next_tick(starting_time, config.MAIN_LOOP_TICK_SECONDS)
+            camera_skip_counter += 1
+            camera_skip_counter %= config.CAMERA_SKIP_MEASUREMENTS
+            sleep_till_next_tick(starting_time, config.MAIN_LOOP_TICK_SECONDS)
+    finally:
+        RPi.GPIO.cleanup()
