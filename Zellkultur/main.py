@@ -86,7 +86,7 @@ if __name__ == '__main__':
 
         temp_thread = threading.Thread(target=read_tempsensor, args=(tempsensor, shared_thread_data))
         boden_thread = threading.Thread(target=read_bodensensor, args=(bodensensor, shared_thread_data))
-        camera_thread = threading.Thread(target=read_camera, args=(camera_skip_counter != 0))
+        camera_thread = threading.Thread(target=read_camera, args=(camera_skip_counter != 0,))
 
 
         temp_thread.start()
