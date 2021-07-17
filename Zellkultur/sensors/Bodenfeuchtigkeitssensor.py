@@ -1,15 +1,11 @@
-from Zellkultur.sensors.MCP3008 import MCP3008
-import time
+import RPi.GPIO as GPIO
+GPIO.setmode(GPIO.BCM)
 
-def setup(channel = 0):
-    return {"adc":MCP3008(), "channel":channel}
 
-def read(sensor):
-    return sensor["adc"].read(channel=sensor["channel"])
+class Bodenfeuchtigkeitssensor:
+    def __init__(self, pin):
+        GPIO.setup(pin, GPIO.IN)
+        self.pin = pin
 
-if __name__ == '__main__':
-    boden = setup()
-
-    for i in range(100):
-        print(f"messung {read(boden)}")
-        time.sleep(1)
+    def read(self):
+        return "HIGH" if GPIO.input(self.pin) == 0 else "LOW"

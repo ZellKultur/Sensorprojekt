@@ -26,7 +26,7 @@ def read_tempsensor(temp_sensor, shared_data):
 
 
 def read_bodensensor(boden_sensor, shared_data):
-    shared_data["bodensensor"] = sensors.Bodenfeuchtigkeitssensor.read(boden_sensor)
+    shared_data["bodensensor"] = boden_sensor.read()
     return
 
 
@@ -57,7 +57,7 @@ def sleep_till_next_tick(anchor_time, tick_interval):
 
 if __name__ == '__main__':
     tempsensor = sensors.Temp_HumiditySensor.setup(config.TEMPSENSORPIN)
-    bodensensor = sensors.Bodenfeuchtigkeitssensor.setup(config.BODENSENSORMCPCHANNEL)
+    bodensensor = sensors.Bodenfeuchtigkeitssensor.Bodenfeuchtigkeitssensor(config.BODENSENSORMCPCHANNEL)
     setup_csv()
     starting_time = time.time()
 
