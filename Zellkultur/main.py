@@ -67,7 +67,7 @@ def write_data_to_cli(data_to_write):
                 bodendata = data_to_write["bodensensor"]
                 temperatur = data_to_write["tempsensor"]["temp"]
                 feuchtigkeit = data_to_write["tempsensor"]["humidity"]
-                print(f"{timestamp} Bodenfeuchtigkeit: {bodendata: 4} Temperatur: {temperatur:>6.2f}°C Luftfeuchtigkeit: {feuchtigkeit:>6.2f}%")
+                print(f"{timestamp} Bodenfeuchtigkeit: {bodendata:>4} Temperatur: {temperatur:>6.2f}°C Luftfeuchtigkeit: {feuchtigkeit:>6.2f}%")
 
 
 def sleep_till_next_tick(anchor_time, tick_interval):
