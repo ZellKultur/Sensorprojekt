@@ -57,7 +57,7 @@ def sleep_till_next_tick(anchor_time, tick_interval):
 
 if __name__ == '__main__':
     tempsensor = sensors.Temp_HumiditySensor.setup(config.TEMPSENSORPIN)
-    bodensensor = sensors.Bodenfeuchtigkeitssensor.Bodenfeuchtigkeitssensor(config.BODENSENSORMCPCHANNEL)
+    bodensensor = sensors.Bodenfeuchtigkeitssensor.Bodenfeuchtigkeitssensor(config.BODENSENSORPIN)
     setup_csv()
     starting_time = time.time()
 
@@ -72,5 +72,7 @@ if __name__ == '__main__':
 
         temp_thread.join()
         boden_thread.join()
+
+        write_data_to_csv(shared_thread_data)
 
         sleep_till_next_tick(starting_time, config.MAIN_LOOP_TICK_SECONDS)
