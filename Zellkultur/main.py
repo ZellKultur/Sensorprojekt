@@ -42,6 +42,14 @@ def write_data_to_csv(data_to_write):
         file.write(line)
 
 
+def write_data_to_cli(data_to_write):
+                timestamp = data_to_write["tempsensor"]["timestamp"].strftime('%Y-%m-%d %H:%M:%S')
+                bodendata = data_to_write["bodensensor"]
+                temperatur = data_to_write["tempsensor"]["temp"]
+                feuchtigkeit = data_to_write["tempsensor"]["humidity"]
+                print(f"{timestamp} Bodenfeuchtigkeit: {bodendata} Temperatur: {temperatur:>6.2f}°C Luftfeuchtigkeit: {feuchtigkeit:>6.2f}%")
+
+
 def sleep_till_next_tick(anchor_time, tick_interval):
     """This function sleeps till the next sheduled tick interval comes around.
     This important as sleep(60) might wait a fraction of a second more then 60. Thus over many minutes,
@@ -74,5 +82,6 @@ if __name__ == '__main__':
         boden_thread.join()
 
         write_data_to_csv(shared_thread_data)
+        write_data_to_cli(shared_thread_data)
 
         sleep_till_next_tick(starting_time, config.MAIN_LOOP_TICK_SECONDS)
