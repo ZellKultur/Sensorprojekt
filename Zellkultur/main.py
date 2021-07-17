@@ -34,9 +34,9 @@ def read_camera(skip):
     if skip:
         return
     print("say cheese!")
-    basepath = sensors.Camera.create_testbilder_path(config.IMAGE_PATH)
+    sensors.Camera.create_testbilder_path(config.IMAGE_PATH)
     filename = sensors.Camera.timestampname()
-    filepath = f"{basepath}/{filename}"
+    filepath = f"{config.IMAGE_PATH}/{filename}"
     sensors.Camera.take_picture(filepath)
     print("took a picture")
     return
