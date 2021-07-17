@@ -30,7 +30,7 @@ def read_bodensensor(boden_sensor, shared_data):
     return
 
 
-def read_camera(skip=False):
+def read_camera(skip):
     if skip:
         return
     print("say cheese!")
