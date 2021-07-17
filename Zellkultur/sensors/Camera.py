@@ -15,7 +15,7 @@ def take_picture(filepath):
     time.sleep(2) # Camera needs to "preheat" to focus
     camera.capture(filepath)
     camera.stop_preview()
-
+    camera.close()
 
 def timestampname():
     timestamp = datetime.datetime.now().isoformat()
