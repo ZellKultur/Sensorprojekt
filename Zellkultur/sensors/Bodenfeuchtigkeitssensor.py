@@ -1,4 +1,4 @@
-from MCP3008 import MCP3008
+from Zellkultur.sensors.MCP3008 import MCP3008
 import time
 
 def setup(channel = 0):
