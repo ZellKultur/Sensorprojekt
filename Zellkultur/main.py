@@ -53,7 +53,7 @@ def read_camera(skip):
 def write_data_to_csv(data_to_write):
     tempdata = data_to_write["tempsensor"]
     bodendata = data_to_write["bodensensor"]
-    with open(config.CSV_FILENAME, "w") as file:
+    with open(config.CSV_FILENAME, "a") as file:
         timestamp = tempdata["timestamp"]
         temperatur = tempdata["temp"]
         humidity = tempdata["humidity"]
