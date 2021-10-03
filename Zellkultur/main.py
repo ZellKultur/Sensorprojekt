@@ -12,7 +12,7 @@ import RPi.GPIO
 def setup_csv(): #kommentar
     if not os.path.isfile(config.CSV_FILENAME):
         with open(config.CSV_FILENAME, "w+") as file:
-            file.write("Timestamp; temp; humidity; bodenfeuchtigkeit;\n")
+            file.write("Timestamp; Temperatur; Luftfeuchtigkeit; Bodenfeuchtigkeit;\n")
 
 
 def read_tempsensor(temp_sensor, shared_data):
